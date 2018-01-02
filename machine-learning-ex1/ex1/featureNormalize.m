@@ -64,6 +64,11 @@ for i = 1:size(X, 1)
   end
 end
 
+% Vectorized implementation
+% mu = mean(X);
+% sigma = std(X);
+% X_norm = (X - mu) ./ sigma;
+
 % ============================================================
 
 
