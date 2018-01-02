@@ -26,14 +26,45 @@ sigma = zeros(1, size(X, 2));
 % Hint: You might find the 'mean' and 'std' functions useful.
 %       
 
+% Going to do this exercise using iterative programming instead of vectorization
+l = size(X, 1);
 
+% First, calculating iteratively the median mu
+for i = 1:size(X, 1)
+  for j = 1:size(X, 2)
+    mu(1, j) = mu(1, j) + X(i,j);
+  end
+end
+% We now, divide the computation by l
+mu = mu ./ l;
 
+% Second, Calculating the standard deviation
+% In this case, the first step is to calculate the sample deviation upper half
+%
+% Standard Deviation  = sqrt(Variance(X_i))
+% where Variance(X_i) = sum_{j=1}^{j=m}(X_ij - mu_ij)^2 * 1 / m - 1
+for i = 1:size(X, 1)
+  for j = 1:size(X, 2)
+    upper = (X(i, j) - mu(1, j)) ^ 2;
+    sigma(1, j) = sigma(1, j) + upper;
+  end
+end
 
+% We now apply divide sigma by m - 1
+sigma = sigma ./ (l - 1);
 
+% Now take the sqrt
+sigma = sqrt(sigma);
 
-
-
+% Third part, subtract the encountered values from X
+% where X_norm = (X - mu) / sigma
+for i = 1:size(X, 1)
+  for j = 1:size(X, 2)
+    X_norm(i, j) = (X_norm(i, j) - mu(1, j)) / sigma(1, j);
+  end
+end
 
 % ============================================================
+
 
 end
