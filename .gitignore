@@ -1,2 +1,5 @@
 # Exclude Coursera Login Token
 token*mat*
+
+# Octave IDE files
+octave*workspace*
