@@ -16,17 +16,16 @@ for iter = 1:num_iters
     % Hint: While debugging, it can be useful to print out the values
     %       of the cost function (computeCostMulti) and gradient here.
     %
+    H  = X * theta;  % Our Hipothesis
+    C  = H - y;      % Cost of each training example
+    CT = C.';        % Tranpose of C
+    GC = CT * X;     % Gradient Cost = Transpose of cost * X's features
+    GF = GC.';       % Refixed Gradient Cost (needed to transpose back)
+    
+    G     = alpha * (1 / m) * GF; % Gradient Matrix
+    theta = theta - G;            % Update Theta
 
-
-
-
-
-
-
-
-
-
-
+    
     % ============================================================
 
     % Save the cost J in every iteration    

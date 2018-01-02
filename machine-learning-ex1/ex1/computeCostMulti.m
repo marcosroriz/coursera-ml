@@ -12,7 +12,12 @@ J = 0;
 % ====================== YOUR CODE HERE ======================
 % Instructions: Compute the cost of a particular choice of theta
 %               You should set J to the cost.
+H   = X * theta; % Hipothesis 
+C   = H - y;     % Cost
+SC  = C .^ 2;    % Squared Cost
+SSC = sum(SC);   % Sum the Squared Cost
 
+J   = (1 / (2*m)) * SSC;
 
 
 
