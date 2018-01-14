@@ -21,9 +21,24 @@ grad = zeros(size(theta));
 %
 
 
+% ====== COST ==================================================
+HARG = X * theta;      % HIPOTHESIS ARGUMENT
+HIPO = sigmoid(HARG);  % LOGISTIC HIPOTHESIS
 
+POSCLASSCOST = -1 .* y .* log(HIPO);
+NEGCLASSCOST = (1 .- y) .* log(1 .- HIPO);
 
+J = (1 / m) * (sum(POSCLASSCOST) - sum(NEGCLASSCOST));
+% =============================================================
 
+% ====== GRAD ==================================================
+HE = HIPO - y;                % HIPOTHESIS ERROR
+
+grad = (1 / m) .* (X.' * HE); % WE WILL TRANSPOSE X SO WE CAN MULTIPLY ALL 
+                              % FEATURES AT THE SAME TIME AND SUM UP THE ERROR
+                              % OF EACH THETA J.
+
+% =============================================================
 
 
 
