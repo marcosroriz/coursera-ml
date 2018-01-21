@@ -30,6 +30,15 @@ X = [ones(m, 1) X];
 %       for each row.
 %       
 
+% COMPUTE THE HIPOTHESIS ARGUMENT
+HA = X * all_theta.';
+
+% APPLY SIGMOID FUNCTION
+H = sigmoid(HA);
+
+% NOW RETRIEVE THE MAXIMUM VALUE OF THE CLASSES
+[maxvalues, indexes] = max(H, [], 2);
+p = indexes;
 
 
 

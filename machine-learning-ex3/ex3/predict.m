@@ -10,6 +10,10 @@ num_labels = size(Theta2, 1);
 % You need to return the following variables correctly 
 p = zeros(size(X, 1), 1);
 
+% Add ones to the X data matrix
+X = [ones(m, 1) X];
+
+
 % ====================== YOUR CODE HERE ======================
 % Instructions: Complete the following code to make predictions using
 %               your learned neural network. You should set p to a 
@@ -21,14 +25,26 @@ p = zeros(size(X, 1), 1);
 %       can use max(A, [], 2) to obtain the max for each row.
 %
 
+% COMPUTE Z2
+% NOTE THAT X = 401x1, while Theta1 is 25 x 401, HENCE we need to transpose T1
+Z2 = X * Theta1.';
+
+% NOW APPLY ACTIVATION FUNCTION (SIGMOID)
+A2 = sigmoid(Z2);
+
+% NOW ADD MISSING ONES FROM LAYER2
+A2 = [ones(size(A2,1), 1), A2];
 
 
+% COMPUTE Z3
+Z3 = A2 * Theta2.';
 
+% NOW APPLY ACTIVATION FUNCTION (SIGMOID)
+A3 = sigmoid(Z3);
 
+[_, clazz] = max(A3, [], 2);
 
-
-
-
+p = clazz;
 % =========================================================================
 
 
