@@ -49,6 +49,19 @@ X = [ones(m, 1) X];
 %                 initial_theta, options);
 %
 
+% WE ARE GOING TO TRAIN A THETA FOR EACH CLASS
+for c = 1:num_labels
+    % First, we set y == c for the trained class y
+    CY = (y == c);
+    
+    ctheta = zeros(n + 1, 1);
+    options = optimset('GradObj', 'on', 'MaxIter', 50);
+ 
+    % Run fmincg to obtain the optimal theta
+    [theta] = fmincg (@(t)(lrCostFunction(t, X, CY, lambda)), ctheta, options);
+    
+    all_theta(c, :) = theta.';
+end
 
 
 
