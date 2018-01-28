@@ -102,19 +102,23 @@ for i = 1:m
   J = J + xcost;
 end
 
-
 J = (1/m) * J;
 
+% Now, compute the regularization cost R to add to the total cost J
+% First, we need to remove the bias units from the parameters (Non Bias Thetas)
+% Then, we need to square each element.
 
+NonBiasTheta1 = (Theta1(:, 2:end)) .^ 2;
+NonBiasTheta2 = (Theta2(:, 2:end)) .^ 2;
 
+% Now, put everything in a single vector
+NonBiasTheta = [NonBiasTheta1(:); NonBiasTheta2(:)];
 
+% Add lamba term
+R = (lambda / (2*m)) * sum(NonBiasTheta);
 
-
-
-
-
-
-
+% Finally, add the regularization cost to the total cost J
+J = J + R;
 
 
 % -------------------------------------------------------------
