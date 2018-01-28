@@ -120,6 +120,48 @@ R = (lambda / (2*m)) * sum(NonBiasTheta);
 % Finally, add the regularization cost to the total cost J
 J = J + R;
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+%%%% BACK PROPAGATION IMPLEMENTATION %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+for i = 1:m
+  a1 = X(i, :); % training sample
+  
+  z2 = Theta1 * a1.';
+  a2 = sigmoid(z2);
+  a2 = [1; a2]; % add a^2_0
+
+  z3 = Theta2 * a2;
+  a3 = sigmoid(z3);
+  
+  % y(i) returns the correct digit class (ex: 5). 
+  % However we need a vector to represent that, precisely, one that have a digit
+  % 1 in the 5th row and 0 in the remainding ones.
+  yi = zeros(num_labels, 1);
+  yi(y(i)) = 1;
+  
+  delta3 = a3 - yi;
+  delta2 = (Theta2.' * delta3);
+  delta2 = delta2(2:end) .* sigmoidGradient(z2); % removing bias units
+  
+  deltaGrad1 = delta2 * a1;
+  deltaGrad2 = delta3 * a2.';
+  
+  Theta1_grad = Theta1_grad + deltaGrad1;
+  Theta2_grad = Theta2_grad + deltaGrad2;
+end
+
+% Now divide grad by number of samples
+Theta1_grad = (1 / m) * Theta1_grad;
+Theta2_grad = (1 / m) * Theta2_grad;
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
 
 % -------------------------------------------------------------
 
