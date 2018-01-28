@@ -62,11 +62,48 @@ Theta2_grad = zeros(size(Theta2));
 %               and Theta2_grad from Part 2.
 %
 
+%%%% FEED FOWARD IMPLEMENTATION %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Add ones to the X data matrix
+X = [ones(m, 1) X];
+
+for i = 1:m
+  a1 = X(i, :); % training sample
+  
+  z2 = Theta1 * a1.';
+  a2 = sigmoid(z2);
+  a2 = [1; a2]; % add a^2_0
+
+  z3 = Theta2 * a2;
+  a3 = sigmoid(z3);
+  
+  % y(i) returns the correct digit class (ex: 5). 
+  % However we need a vector to represent that, precisely, one that have a digit
+  % 1 in the 5th row and 0 in the remainding ones.
+  yi = zeros(num_labels, 1);
+  yi(y(i)) = 1;
+  
+%  % compute the cost of each class imperatively
+%  xcost = 0;
+%  for k = 1:num_labels
+%    % Divide the cost equation in two parts (fp - sp)
+%    fp = -yi(k) * log(a3(k));
+%    sp = (1 - yi(k)) * log(1 - a3(k));
+%    xcost = xcost + fp - sp;
+%  end
+  
+  % compute k cost in a single step (alternative vectorized impl)
+  % Divide the cost equation in two parts (fp - sp)
+  % xcost vector = fp - sp;
+  fp = -yi.' * log(a3);
+  sp = (ones(size(yi), 1) - yi).' * log(ones(size(a3), 1) - a3);
+  xcost = fp - sp;  
+  
+  J = J + xcost;
+end
 
 
-
-
-
+J = (1/m) * J;
 
 
 
