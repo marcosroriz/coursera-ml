@@ -161,6 +161,20 @@ Theta2_grad = (1 / m) * Theta2_grad;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
+%%%% BACK PROPAGATION REGULARIZATION %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Regularization requires us to discard Theta0 (bias column) by making it zero
+
+RegTheta1 = Theta1;
+RegTheta1(:,1) = 0;
+
+Theta1_grad = Theta1_grad + (lambda / m) * RegTheta1;
+
+
+RegTheta2 = Theta2;
+RegTheta2(:,1) = 0;
+
+Theta2_grad = Theta2_grad + (lambda / m) * RegTheta2;
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
 % -------------------------------------------------------------
