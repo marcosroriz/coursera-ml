@@ -62,14 +62,12 @@ Theta2_grad = zeros(size(Theta2));
 %               and Theta2_grad from Part 2.
 %
 
-%%%% OPTIMIZED IMPLEMENTATION %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%% DOING FORWARD AND BACKPROPAGATION IN A SINGLE STEP %%%%%%%%%%%%%%%%%%%%%%%%
+%%%% FEED FOWARD IMPLEMENTATION %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % Add ones to the X data matrix
 X = [ones(m, 1) X];
 
 for i = 1:m
-  % FORWARD PROP
   a1 = X(i, :); % training sample
   
   z2 = Theta1 * a1.';
@@ -85,7 +83,15 @@ for i = 1:m
   yi = zeros(num_labels, 1);
   yi(y(i)) = 1;
   
-  % COST
+%  % compute the cost of each class imperatively
+%  xcost = 0;
+%  for k = 1:num_labels
+%    % Divide the cost equation in two parts (fp - sp)
+%    fp = -yi(k) * log(a3(k));
+%    sp = (1 - yi(k)) * log(1 - a3(k));
+%    xcost = xcost + fp - sp;
+%  end
+  
   % compute k cost in a single step (alternative vectorized impl)
   % Divide the cost equation in two parts (fp - sp)
   % xcost vector = fp - sp;
@@ -94,22 +100,8 @@ for i = 1:m
   xcost = fp - sp;  
   
   J = J + xcost;
-  
-  % BACKPROP
-  delta3 = a3 - yi;
-  delta2 = (Theta2.' * delta3);
-  delta2 = delta2(2:end) .* sigmoidGradient(z2); % removing bias units
-  
-  deltaGrad1 = delta2 * a1;
-  deltaGrad2 = delta3 * a2.';
-  
-  Theta1_grad = Theta1_grad + deltaGrad1;
-  Theta2_grad = Theta2_grad + deltaGrad2;
 end
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% COST Computation Continues
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 J = (1/m) * J;
 
 % Now, compute the regularization cost R to add to the total cost J
@@ -128,20 +120,59 @@ R = (lambda / (2*m)) * sum(NonBiasTheta);
 % Finally, add the regularization cost to the total cost J
 J = J + R;
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% BACKPROP continuation
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+%%%% BACK PROPAGATION IMPLEMENTATION %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+for i = 1:m
+  a1 = X(i, :); % training sample
+  
+  z2 = Theta1 * a1.';
+  a2 = sigmoid(z2);
+  a2 = [1; a2]; % add a^2_0
+
+  z3 = Theta2 * a2;
+  a3 = sigmoid(z3);
+  
+  % y(i) returns the correct digit class (ex: 5). 
+  % However we need a vector to represent that, precisely, one that have a digit
+  % 1 in the 5th row and 0 in the remainding ones.
+  yi = zeros(num_labels, 1);
+  yi(y(i)) = 1;
+  
+  delta3 = a3 - yi;
+  delta2 = (Theta2.' * delta3);
+  delta2 = delta2(2:end) .* sigmoidGradient(z2); % removing bias units
+  
+  deltaGrad1 = delta2 * a1;
+  deltaGrad2 = delta3 * a2.';
+  
+  Theta1_grad = Theta1_grad + deltaGrad1;
+  Theta2_grad = Theta2_grad + deltaGrad2;
+end
+
 % Now divide grad by number of samples
 Theta1_grad = (1 / m) * Theta1_grad;
 Theta2_grad = (1 / m) * Theta2_grad;
 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%%% BACK PROPAGATION REGULARIZATION %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Regularization requires us to discard Theta0 (bias column) by making it zero
+
 RegTheta1 = Theta1;
 RegTheta1(:,1) = 0;
+
 Theta1_grad = Theta1_grad + (lambda / m) * RegTheta1;
+
 
 RegTheta2 = Theta2;
 RegTheta2(:,1) = 0;
+
 Theta2_grad = Theta2_grad + (lambda / m) * RegTheta2;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
