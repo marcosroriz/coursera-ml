@@ -51,6 +51,17 @@ error_val   = zeros(m, 1);
 %       end
 %
 
+for i = 1:m
+  XSUBSET = X(1:i, :);
+  YSUBSET = y(1:i); 
+  LEARNEDTHETA = trainLinearReg(XSUBSET, YSUBSET, lambda);
+  
+  [TRAINCOST, _] = linearRegCostFunction(XSUBSET, YSUBSET, LEARNEDTHETA, 0);
+  [VALIDCOST, _] = linearRegCostFunction(Xval, yval, LEARNEDTHETA, 0);
+  
+  error_train(i) = TRAINCOST;
+  error_val(i)   = VALIDCOST;
+end
 % ---------------------- Sample Solution ----------------------
 
 
