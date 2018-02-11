@@ -16,8 +16,11 @@ sim = 0;
 %
 %
 
-
-
+xdiff = x1 - x2;
+xdiffsq = xdiff .^ 2;
+xdiffsum = sum(xdiffsq);
+power = xdiffsum / (2 * (sigma .^ 2));
+sim = exp(-power);
 
 
 
