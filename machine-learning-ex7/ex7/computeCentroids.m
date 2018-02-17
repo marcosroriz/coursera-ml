@@ -25,7 +25,13 @@ centroids = zeros(K, n);
 %
 % Note: You can use a for-loop over the centroids to compute this.
 %
-
+for c = 1:K
+  clogicarray = (idx == c);
+  ctotalelems = sum(clogicarray);
+  
+  cmean = clogicarray' * X;
+  centroids(c, :) = (1 / ctotalelems) * cmean;
+end
 
 
 

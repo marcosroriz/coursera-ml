@@ -20,7 +20,22 @@ idx = zeros(size(X,1), 1);
 %
 % Note: You can use a for-loop over the examples to compute this.
 %
-
+m = size(X, 1);
+for i = 1:m
+  xi = X(i, :);
+  closestIndex = 1;
+  closestValue = sum((xi - centroids(1, :)) .^ 2);
+  
+  for j = 2:K
+      centroidJValue = sum((xi - centroids(j, :)) .^ 2);
+      
+      if centroidJValue < closestValue
+        closestValue = centroidJValue;
+        closestIndex = j;
+      end
+  end
+  idx(i) = closestIndex;
+end
 
 
 
